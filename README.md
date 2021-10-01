@@ -17,5 +17,5 @@ your root is equal :
  x: -1.0000000000
 ```
 ## Documentation
-
-[]()
+Description of functions and files:
+[General documentation](https://github.com/matveevi/quadratic_equation/blob/quadratic_equation/docs/html/index.html)
