@@ -2,14 +2,14 @@
 
 const int MAX_SIZE_FOR_TEST = 5;
 
-struct CoefficientsAndRootForLinear {
+struct TestCaseLinear {
     double first;
     double second;
     double root;
     int return_roots;
 };
 
-struct CoefficientsAndRootsForQuadratic {
+struct TestCaseQuadratic {
     double first;
     double second;
     double third;
@@ -23,13 +23,14 @@ void TestIsZero(double num[MAX_SIZE_FOR_TEST], bool check_variable) {
         if (!(check_variable == IsZero(num[i]))) {
             printf("[INCORRECT] IsZero(%lf) returned %d; expected %d.\n",
                     num[i], IsZero(num[i]), check_variable);
+        } else {
+            printf("[OK] IsZero(%lf) returned %d; expected %d.\n",
+                    num[i], IsZero(num[i]), check_variable);
         }
-        printf("[OK] IsZero(%lf) returned %d; expected %d.\n",
-                num[i], IsZero(num[i]), check_variable);
     }
 }
 
-void TestSolveLinearEquation(CoefficientsAndRootForLinear input[MAX_SIZE_FOR_TEST]) {
+void TestSolveLinearEquation(TestCaseLinear input[MAX_SIZE_FOR_TEST]) {
     double x;
     x = 0;
     for (int i = 0; i < MAX_SIZE_FOR_TEST; i++) {
@@ -37,18 +38,22 @@ void TestSolveLinearEquation(CoefficientsAndRootForLinear input[MAX_SIZE_FOR_TES
         if (!(input[i].return_roots == return_value)) {
             printf("[INCORRECT] SolveLinearEquation(%lf %lf x) returned %d; expected %d.\n",
                     input[i].first, input[i].second, return_value, input[i].return_roots);
+        } else {
+            printf("[OK] SolveLinearEquation(%lf %lf x) returned %d; expected %d.\n",
+                    input[i].first, input[i].second, return_value, input[i].return_roots);
         }
         if (x != input[i].root) {
             printf("[INCORRECT] Answer by SolveLinearEquation: %lf ; expected %lf.",
                     x, input[i].root);
+        } else {
+            printf("[OK] Answer by SolveLinearEquation: %lf ; expected %lf.",
+                    x, input[i].root);
         }
-        printf("[OK] SolveLinearEquation(%lf %lf x) returned %d; expected %d.\n",
-                input[i].first, input[i].second, return_value, input[i].return_roots);
         x = 0;
     }
 }
 
-void TestSolveQuadraticEquation(CoefficientsAndRootsForQuadratic input[MAX_SIZE_FOR_TEST]) {
+void TestSolveQuadraticEquation(TestCaseQuadratic input[MAX_SIZE_FOR_TEST]) {
     double x1;
     double x2;
     x1 = 0;
@@ -58,13 +63,17 @@ void TestSolveQuadraticEquation(CoefficientsAndRootsForQuadratic input[MAX_SIZE_
         if (!(input[i].return_roots == return_value)) {
             printf("[INCORRECT] SolveQuadraticEquation(%lf %lf %lf x1, x2) returned %d; expected %d.\n", 
                     input[i].first, input[i].second, input[i].third, return_value, input[i].return_roots);
+        } else {
+            printf("[OK] SolveQuadraticEquation(%lf %lf %lf x1, x2) returned %d; expected %d.\n", 
+                    input[i].first, input[i].second, input[i].third, return_value, input[i].return_roots);
         }
         if (x1 != input[i].root_first && x2 != input[i].root_second) {
             printf("[INCORRECT] Answer by SolveQuadraticEquation: %lf %lf; expected %lf %lf.\n",
                     x1, x2, input[i].root_first, input[i].root_second);
+        } else {
+            printf("[OK] Answer by SolveQuadraticEquation: %lf %lf; expected %lf %lf.\n",
+                    x1, x2, input[i].root_first, input[i].root_second);
         }
-        printf("[OK] SolveQuadraticEquation(%lf %lf %lf x1, x2) returned %d; expected %d.\n",
-                input[i].first, input[i].second, input[i].third, return_value, input[i].return_roots);
         x1 = 0;
         x2 = 0;
     }
@@ -73,24 +82,22 @@ void TestSolveQuadraticEquation(CoefficientsAndRootsForQuadratic input[MAX_SIZE_
 int main() {
     double test_is_zero_true[MAX_SIZE_FOR_TEST] = {2.0e-017, 0.0f, -0.0f, 1.0e-016, 1.0e-020};
     double test_is_zero_false[MAX_SIZE_FOR_TEST] = {0.19f, -1.0f, -0.1f, -5, 5};
-    CoefficientsAndRootForLinear test_solve_linear_equation[MAX_SIZE_FOR_TEST] = {{1, 0, 0, 1},
+    TestCaseLinear test_solve_linear_equation[MAX_SIZE_FOR_TEST] = {{1, 0, 0, 1},
                                                                                   {-1, 0, 0, 1},
                                                                                   {20, 5, -0.25f, 1},
                                                                                   {0, 0, 0, ANY_ROOTS},
                                                                                   {0, 1, 0, 0}};
-    CoefficientsAndRootsForQuadratic test_solve_quadratic_equation[MAX_SIZE_FOR_TEST] = {{1, 1, 1, 0, 0, 0},
+    TestCaseQuadratic test_solve_quadratic_equation[MAX_SIZE_FOR_TEST] = {{1, 1, 1, 0, 0, 0},
                                                                                          {1, 1, 0, -1.0f, 0.0f, 2},
                                                                                          {2, 5, 6, 0, 0, 0},
                                                                                          {0, 0, 0, 0, 0, ANY_ROOTS},
                                                                                          {1, -1, 0, 0.0f, 1.0f, 2}};
 
-    for (int i = 0; i < 5; i++) {
-        TestIsZero(test_is_zero_false, false);
-        TestIsZero(test_is_zero_true, true);
+    TestIsZero(test_is_zero_false, false);
+    TestIsZero(test_is_zero_true, true);
 
-        TestSolveLinearEquation(test_solve_linear_equation);
+    TestSolveLinearEquation(test_solve_linear_equation);
 
-        TestSolveQuadraticEquation(test_solve_quadratic_equation);
-    }
+    TestSolveQuadraticEquation(test_solve_quadratic_equation);
     return 0;
 }
