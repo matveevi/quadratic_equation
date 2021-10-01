@@ -1,13 +1,15 @@
 #include "quadratic_equation.h"
 
-struct CoefficentsForLinear {
+const int MAX_SIZE_FOR_TEST = 5;
+
+struct CoefficientsAndRootForLinear {
     double first;
     double second;
     double root;
     int return_roots;
 };
 
-struct CoefficentsForQuadratic {
+struct CoefficientsAndRootsForQuadratic {
     double first;
     double second;
     double third;
@@ -16,70 +18,79 @@ struct CoefficentsForQuadratic {
     int return_roots;
 };
 
-bool TestIsZero(double num[3], bool check_veriable) {
-    for (int i = 0; i < 3; i++) {
-        if (!(check_veriable == IsZero(num[i]))) {
-            return false;
+void TestIsZero(double num[MAX_SIZE_FOR_TEST], bool check_variable) {
+    for (int i = 0; i < MAX_SIZE_FOR_TEST; i++) {
+        if (!(check_variable == IsZero(num[i]))) {
+            printf("[INCORRECT] IsZero(%lf) returned %d; expected %d.\n",
+                    num[i], IsZero(num[i]), check_variable);
         }
+        printf("[OK] IsZero(%lf) returned %d; expected %d.\n",
+                num[i], IsZero(num[i]), check_variable);
     }
-
-    return true;
 }
 
-bool TestSolveLinearEquation(CoefficentsForLinear input[5]) {
+void TestSolveLinearEquation(CoefficientsAndRootForLinear input[MAX_SIZE_FOR_TEST]) {
     double x;
     x = 0;
-    for (int i = 0; i < 5; i++) {
-        if (!(input[i].return_roots == SolveLinearEquation(input[i].first, input[i].second, &x)) && x != input[i].root) {
-            return false;
+    for (int i = 0; i < MAX_SIZE_FOR_TEST; i++) {
+        int return_value = SolveLinearEquation(input[i].first, input[i].second, &x);
+        if (!(input[i].return_roots == return_value)) {
+            printf("[INCORRECT] SolveLinearEquation(%lf %lf x) returned %d; expected %d.\n",
+                    input[i].first, input[i].second, return_value, input[i].return_roots);
         }
+        if (x != input[i].root) {
+            printf("[INCORRECT] Answer by SolveLinearEquation: %lf ; expected %lf.",
+                    x, input[i].root);
+        }
+        printf("[OK] SolveLinearEquation(%lf %lf x) returned %d; expected %d.\n",
+                input[i].first, input[i].second, return_value, input[i].return_roots);
         x = 0;
     }
-
-    return true;
 }
 
-bool TestSolveQuadraticEquation(CoefficentsForQuadratic input[5]) {
+void TestSolveQuadraticEquation(CoefficientsAndRootsForQuadratic input[MAX_SIZE_FOR_TEST]) {
     double x1;
     double x2;
     x1 = 0;
     x2 = 0;
-    for (int i = 0; i < 5; i++) {
-        if (!(input[i].return_roots == SolveQuadraticEquation(input[i].first, input[i].second, input[i].third, &x1, &x2))) {
-            return false;
+    for (int i = 0; i < MAX_SIZE_FOR_TEST; i++) {
+        int return_value = SolveQuadraticEquation(input[i].first, input[i].second, input[i].third, &x1, &x2);
+        if (!(input[i].return_roots == return_value)) {
+            printf("[INCORRECT] SolveQuadraticEquation(%lf %lf %lf x1, x2) returned %d; expected %d.\n", 
+                    input[i].first, input[i].second, input[i].third, return_value, input[i].return_roots);
         }
         if (x1 != input[i].root_first && x2 != input[i].root_second) {
-            return false;
+            printf("[INCORRECT] Answer by SolveQuadraticEquation: %lf %lf; expected %lf %lf.\n",
+                    x1, x2, input[i].root_first, input[i].root_second);
         }
+        printf("[OK] SolveQuadraticEquation(%lf %lf %lf x1, x2) returned %d; expected %d.\n",
+                input[i].first, input[i].second, input[i].third, return_value, input[i].return_roots);
         x1 = 0;
         x2 = 0;
     }
-
-    return true;
 }
 
 int main() {
-    double test_is_zero_true[3] = {2.0e-017, 0.0f, -0.0f};
-    double test_is_zero_false[3] = {0.19f, -1.0f, -0.1f};
-    CoefficentsForLinear test_solve_linear_equation[5] = {{1, 0, 0, 1}, {-1, 0, 0, 1}, {20, 5, -0.25f, 1}, {0, 0, 0, ANY_ROOTS}, {0, 1, 0, 0}};
-    CoefficentsForQuadratic test_solve_quadratic_equation[5] = {{1, 1, 1, 0, 0, 0}, {1, 1, 0, -1.0f, 0.0f, 2}, {2, 5, 6, 0, 0, 0}, {0, 0, 0, 0, 0, ANY_ROOTS}, {1, -1, 0, 0.0f, 1.0f, 2}};
+    double test_is_zero_true[MAX_SIZE_FOR_TEST] = {2.0e-017, 0.0f, -0.0f, 1.0e-016, 1.0e-020};
+    double test_is_zero_false[MAX_SIZE_FOR_TEST] = {0.19f, -1.0f, -0.1f, -5, 5};
+    CoefficientsAndRootForLinear test_solve_linear_equation[MAX_SIZE_FOR_TEST] = {{1, 0, 0, 1},
+                                                                                  {-1, 0, 0, 1},
+                                                                                  {20, 5, -0.25f, 1},
+                                                                                  {0, 0, 0, ANY_ROOTS},
+                                                                                  {0, 1, 0, 0}};
+    CoefficientsAndRootsForQuadratic test_solve_quadratic_equation[MAX_SIZE_FOR_TEST] = {{1, 1, 1, 0, 0, 0},
+                                                                                         {1, 1, 0, -1.0f, 0.0f, 2},
+                                                                                         {2, 5, 6, 0, 0, 0},
+                                                                                         {0, 0, 0, 0, 0, ANY_ROOTS},
+                                                                                         {1, -1, 0, 0.0f, 1.0f, 2}};
 
     for (int i = 0; i < 5; i++) {
-        if (!TestIsZero(test_is_zero_false, false) || !TestIsZero(test_is_zero_true, true)) {
-            printf("Error in function IsZero\n");
-            return 1;
-        }
-        if (!TestSolveLinearEquation(test_solve_linear_equation)) {
-            printf("Error in function SolveLinearEquation\n");
-            return 1;
-        }
-        if (!TestSolveQuadraticEquation(test_solve_quadratic_equation)) {
-            printf("Error in function SolveQuadraticEquation\n");
-            return 1;
-        }
+        TestIsZero(test_is_zero_false, false);
+        TestIsZero(test_is_zero_true, true);
+
+        TestSolveLinearEquation(test_solve_linear_equation);
+
+        TestSolveQuadraticEquation(test_solve_quadratic_equation);
     }
-
-    printf("Everything is good\n");
-
     return 0;
 }
