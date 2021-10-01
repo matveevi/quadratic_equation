@@ -13,10 +13,6 @@ bool IsZero(double num) {
     return num > -DBL_EPSILON && num < DBL_EPSILON;
 }
 
-main
-TestIsZero(0.00001f, true);
-
-
 bool TestIsZero(double num, bool answer)
 {
     return IsZero(num) == answer;
